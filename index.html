@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>WebSocket Demo</title>
+  </head>
+
+  <body>
+    <h1>WebSocket Chat</h1>
+
+    <input id="message" placeholder="Enter message">
+    <button id="send">Send</button>
+
+    <ul id="messages"></ul>
+
+    <script>
+
+      const socket = new WebSocket("ws://localhost:8080/chat");
+
+      const messageInput = document.getElementById("message");
+      const sendButton = document.getElementById("send");
+      const messages = document.getElementById("messages");
+
+      socket.onopen = () => {
+        console.log("Connected to WebSocket server");
+      };
+
+      socket.onmessage = (event) => {
+        console.log(event.data);
+        let msg = "";
+        if (typeof event.data === "string") {
+          msg = event.data.trim();
+        }
+        if (msg) {
+          const li = document.createElement("li");
+
+          li.textContent = msg;
+
+          messages.appendChild(li);
+        }
+      };
+
+      socket.onclose = () => {
+        console.log("WebSocket connection closed");
+      };
+
+      const sendHandler = () => {
+        socket.send(messageInput.value);
+        messageInput.value = "";
+      };
+
+      sendButton.addEventListener("click", sendHandler);
+
+      messageInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          sendHandler();
+        }
+      });
+
+    </script>
+
+  </body>
+</html>
