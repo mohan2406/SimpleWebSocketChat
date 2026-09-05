@@ -1,20 +1,25 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <title>WebSocket Demo</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
 
   <body>
     <h1>WebSocket Chat</h1>
 
-    <input id="message" placeholder="Enter message">
+    <input id="message" placeholder="Enter message" />
     <button id="send">Send</button>
 
     <ul id="messages"></ul>
 
     <script>
+      const protocol = window.location.protocol === "https:" ? "wss" : "ws";
 
-      const socket = new WebSocket("ws://localhost:8080/chat");
+      const socket = new WebSocket(
+        `${protocol}://${window.location.host}/chat`,
+      );
 
       const messageInput = document.getElementById("message");
       const sendButton = document.getElementById("send");
@@ -55,8 +60,6 @@
           sendHandler();
         }
       });
-
     </script>
-
   </body>
 </html>
